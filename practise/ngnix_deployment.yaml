@@ -1,0 +1,27 @@
+# apiVersion - Which version of the Kubernetes API you're using to create this object
+# kind - What kind of object you want to create
+# metadata - Data that helps uniquely identify the object, including a name string, UID, and optional namespace
+# spec - What state you desire for the object
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngnix-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ngnix
+  template:
+    metadata:
+      labels:
+        app: ngnix
+    spec:
+      containers:
+      - name: ngnix
+        image: nginx:1.14.2
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

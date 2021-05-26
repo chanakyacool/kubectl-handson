@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-app
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+      - name: node-app
+        image: chanakyacool/demo-node-app:v2
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+          name: nodejs-port
+        livenessProbe:
+          httpGet:
+            path: /
+            port: nodejs-port
+          initialDelaySeconds: 15
+          timeoutSeconds: 30
+      nodeSelector:
+        hardware: low-spec
