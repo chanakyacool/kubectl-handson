@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-webapp # uniq
+spec:
+  selector:
+    app: webapp
+  ports:
+  - name: http
+    port: 80
+    nodePort: 30080 # should be > 30000
+  type: NodePort # can be exposed to the outsideworld
+  # ClusterIP # use only when it should be accesible inside the cluster not external traffic (browser) like micro service
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-queue
+spec:
+  selector:
+    app: queue
+  ports:
+  - name: http
+    port: 8161
+    nodePort: 30010
+  
+  - name: endpoint
+    port: 61616  # this iwill not be exposed as it is not a nodeport
+
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-position-tracker
+spec:
+  selector:
+    app: position-tracker
+  ports:
+  - name: http
+    port: 8080
+
+  type: ClusterIP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-api-gateway
+spec:
+  selector:
+    app: api-gateway
+  ports:
+  - name: http
+    port: 8080
+  type: ClusterIP
