@@ -1,0 +1,51 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:3.6.5-jessie
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db # folder inside the container we want to mount kuberenets outside the container
+      volumes:
+        - name: mongo-persistent-storage
+          # pointer to the configuration of how we want the mount to be implemented
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+          #hostPath: #hostpaht is since we are using local path to store
+          #  path: /mnt/some/directory/structure
+          #  type: DirectoryOrCreate
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-mongodb
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - name: mongoport
+      port: 27017
+  type: ClusterIP

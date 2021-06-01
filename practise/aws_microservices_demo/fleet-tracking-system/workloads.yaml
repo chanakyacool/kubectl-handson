@@ -39,29 +39,6 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: production-microservice # as suggested by developer, we dont need to expose or create a service for this
 ---
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: position-tracker
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: position-tracker
-  template:
-    metadata:
-      labels:
-        app: position-tracker
-    spec:
-      containers:
-        - name: position-tracker
-          image: richardchesterwood/k8s-fleetman-position-tracker:release2
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: production-microservice # as suggested by developer, we dont need to expose or create a service for this
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -87,7 +64,7 @@ spec:
 
 apiVersion: apps/v1
 kind: Deployment
-metadata:
+metadata: 
   name: webapp
 spec:
   replicas: 1
@@ -104,4 +81,25 @@ spec:
           image: richardchesterwood/k8s-fleetman-webapp-angular:release2
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: production-microservice    
+              value: production-microservice
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: position-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: position-tracker
+  template:
+    metadata:
+      labels:
+        app: position-tracker
+    spec:
+      containers:
+        - name: position-tracker
+          image: richardchesterwood/k8s-fleetman-position-tracker:release3
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: production-microservice # as suggested by developer, we dont need to expose or create a service for this

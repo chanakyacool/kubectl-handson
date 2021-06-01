@@ -1,0 +1,28 @@
+# what do we want
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 20Gi # asking for the storage, it finds the matching storage (persistent volume)
+  accessModes:
+    - ReadWriteOnce
+---
+# how we want it to be implemented ? what physical storage we want to implement
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-storage
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 20Gi
+  hostPath:
+    path: /mnt/some_new/directory/structure
+    type: DirectoryOrCreate
+  accessModes:
+    - ReadWriteOnce
+
