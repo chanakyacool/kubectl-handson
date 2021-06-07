@@ -25,4 +25,3 @@ spec:
     type: DirectoryOrCreate
   accessModes:
     - ReadWriteOnce
-
